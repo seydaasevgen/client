@@ -3,6 +3,7 @@ import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Member } from '../_models/member';
 import { of, tap } from 'rxjs';
+import { Photo } from '../_models/photo';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +34,41 @@ export class MembersService {
     })
   )
  }
+
+ setMainPhoto(photo: Photo){
+  return this.http.put(this.baseUrl + 'users/set-main-photo/' + photo.id, {}).pipe(
+    tap( () => {
+      this.members.update(members => members.map(m => {
+        if(m.photos.includes(photo)){
+          m.photoUrl = photo.url
+        }
+        return m;
+      }))
+    })
+  )
+ }
+
+//  deletePhoto(photoId: number)
+//  {
+//   return this.http.delete(this.baseUrl + 'users/delete-photo/' + photoId);
+//  }
+
+//yukarıdakı kod kalınca bır sayfadan dıgerıne gecınce aslında dbde sılınen resım yıne gelıyor.member update edılmelı.
  
+deletePhoto(photo: Photo)
+{
+ return this.http.delete(this.baseUrl + 'users/delete-photo/' + photo.id).pipe(
+  tap( () => {
+    this.members.update(members => members.map(m => {
+      if(m.photos.includes(photo)) {
+        m.photos = m.photos.filter (x => x.id !== photo.id)
+      }
+      return m;
+    }))
+  })
+ )
+}
+
 }
 
 
