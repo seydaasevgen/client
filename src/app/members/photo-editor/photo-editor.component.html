@@ -1,11 +1,16 @@
 <div class="row">
     @for (photo of member().photos; track photo.id) {
-        <div class="col-2">
-            <img src="{{photo.url}}" alt="photo of user" class="img-thumbnail mb-1">
+        <div class="col-2 position-relative">
+            <div class="photo-container" [ngClass]="{'blur-photo': !photo.isApproved}">
+                <img [src]="photo.url" alt="photo of user" class="img-thumbnail mb-1">
+                <div *ngIf="!photo.isApproved" class="approval-overlay">
+                  Awaiting approval
+                </div>
+            </div>
             <div class="text-center">
                 <button 
                     class="btn btn-sm me-1"
-                    [disabled]="photo.isMain"
+                    [disabled]="!photo.isApproved || photo.isMain"
                     (click)="setMainPhoto(photo)"
                     [ngClass]="photo.isMain ? 'btn-success active' : 'btn-outline-success' "
                 >Main</button>
@@ -17,8 +22,6 @@
             </div>
         </div>
     }
-</div>
-
 <!-- ng file upload -->
 
 <div class="row mt-5">

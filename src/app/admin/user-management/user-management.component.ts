@@ -52,4 +52,5 @@ export class UserManagementComponent implements OnInit{
       next: users => this.users = users
     })
   }
+  
 }
