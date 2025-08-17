@@ -19,13 +19,14 @@ export class MemberMessagesComponent implements AfterViewChecked{
   //messages = input.required<Message[]>();  //readonly
   messageContent = '';
   //updateMessages = output<Message>();
+  loading = false;
 
   sendMessage(){
-    
+    this.loading = true;
     this.messageService.senderMessage(this.username(),this.messageContent).then( () => {
       this.messageForm?.reset();
       this.scrollToBottom();
-    })
+    }).finally(() => this.loading = false);
 
 
     // this.messageService.senderMessage(this.username(),this.messageContent).subscribe({
